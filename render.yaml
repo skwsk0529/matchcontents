@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: timeql-advice-bot
+    runtime: node
+    plan: free
+    buildCommand: ""
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: NODE_ENV
+        value: production
+      - key: TIMEQL_API_KEY
+        sync: false
