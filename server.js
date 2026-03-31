@@ -557,7 +557,7 @@ const server = http.createServer(async (req, res) => {
   if (req.method === "GET" && url.pathname === "/health") {
     sendJson(res, 200, {
       ok: true,
-      service: "timeql-advice-bot",
+      service: "read-life",
       hasTimeqlKey: Boolean(TIMEQL_API_KEY)
     });
     return;

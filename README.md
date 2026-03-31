@@ -1,4 +1,4 @@
-# TimeQL Advice Bot
+# Read Life
 
 TimeQL API の返却内容だけを使って、`今日の自分向け助言` と `二人の相性` を返す最小チャットアプリです。
 

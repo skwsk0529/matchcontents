@@ -1,5 +1,5 @@
 {
-  "name": "timeql-advice-bot",
+  "name": "read-life",
   "version": "0.1.0",
   "private": true,
   "description": "Minimal chat-style app that uses TimeQL API data to generate immediate action advice.",
