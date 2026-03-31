@@ -4,7 +4,7 @@ const http = require("node:http");
 const { URL } = require("node:url");
 
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || "127.0.0.1";
+const HOST = process.env.HOST || "0.0.0.0";
 const TIMEQL_API_KEY = loadEnv(".env").TIMEQL_API_KEY || process.env.TIMEQL_API_KEY;
 const PUBLIC_DIR = path.join(__dirname, "public");
 const rateLimitWindowMs = 60 * 1000;
