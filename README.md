@@ -1,16 +1,24 @@
 # TimeQL Advice Bot
 
-TimeQL API の返却内容だけを使って、直近の行動アドバイスを返す最小チャットアプリです。
+TimeQL API の返却内容だけを使って、`今日の自分向け助言` と `二人の相性` を返す最小チャットアプリです。
 
 ## 仕様
 
-- 入力: `YYYYMMDD` の生年月日、`HH:mm` の出生時刻、出生地
+- 入力:
+  - 今日の自分向け助言: `YYYYMMDD` の生年月日、`HH:mm` の出生時刻、出生地
+  - 二人の相性: 2人分の生年月日、出生時刻、出生地
 - 利用 API:
-  - `POST /api/v1/natal_chart`
   - `POST /api/v1/transits`
+  - `POST /api/v1/sukuyo/fortune`
+  - `POST /api/v1/kyusei`
+  - `POST /api/v1/qimen`
+  - `POST /api/v1/synastry`
+  - `POST /api/v1/sukuyo/compatibility`
+  - `POST /api/v1/kyusei/compatibility`
 - 出力:
   - TimeQL の返却事実を要約
-  - その事実に基づく短い直近アドバイス
+  - その事実に基づく短い日次アドバイス
+  - その事実に基づく短い相性コメント
 - 制約:
   - 外部LLMは使わず、TimeQL の取得結果だけで文面を構成
 

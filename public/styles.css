@@ -45,18 +45,41 @@ body {
 
 .hero h1 {
   margin: 0;
-  max-width: 10ch;
-  font-size: clamp(2.4rem, 5vw, 4.6rem);
+  max-width: 12ch;
+  font-size: clamp(2.2rem, 5vw, 4.3rem);
   line-height: 0.95;
   font-weight: 700;
 }
 
 .lead {
-  max-width: 60ch;
+  max-width: 62ch;
   margin: 18px 0 0;
   font-size: 1rem;
   line-height: 1.8;
   color: var(--muted);
+}
+
+.mode-switch {
+  display: flex;
+  gap: 10px;
+  margin: 0 0 20px;
+}
+
+.mode-tab {
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  color: var(--ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.mode-tab.active {
+  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%);
+  color: #fff;
+  border-color: transparent;
 }
 
 .panel {
@@ -71,10 +94,41 @@ body {
   padding: 22px;
 }
 
-form {
+.mode-form {
+  display: none;
+}
+
+.mode-form.active {
+  display: block;
+}
+
+.form-grid,
+.people-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+.form-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.people-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.person-card {
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.46);
+}
+
+.person-label {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 label {
@@ -82,6 +136,7 @@ label {
   flex-direction: column;
   gap: 8px;
   font-size: 14px;
+  margin-bottom: 14px;
 }
 
 input,
@@ -98,8 +153,8 @@ input {
   color: var(--ink);
 }
 
-button {
-  grid-column: 1 / -1;
+button[type="submit"] {
+  width: 100%;
   min-height: 52px;
   border: 0;
   border-radius: 999px;
@@ -157,6 +212,7 @@ button {
   border-top: 1px solid var(--line);
   color: var(--muted);
   font-size: 14px;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 720px) {
@@ -165,8 +221,11 @@ button {
     padding-top: 24px;
   }
 
-  form {
+  .form-grid,
+  .people-grid,
+  .mode-switch {
     grid-template-columns: 1fr;
+    flex-direction: column;
   }
 
   .hero h1 {

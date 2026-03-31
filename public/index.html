@@ -10,46 +10,96 @@
     <main class="app-shell">
       <section class="hero">
         <p class="eyebrow">TimeQL Advice Bot</p>
-        <h1>APIの返却事実だけで、次の一歩を返す。</h1>
+        <h1>今日の自分向け助言と、二人の相性を分けて扱う。</h1>
         <p class="lead">
-          生年月日8桁と出生時刻を入力すると、TimeQL の `natal_chart` と `transits`
-          を参照して、直近の行動アドバイスを返します。
+          TimeQL の返却事実だけを使って、今日の行動アドバイスと二人の相性を整理します。
+          使う系統は西洋占星術、宿曜、九星気学、奇門遁甲です。
         </p>
       </section>
 
+      <section class="mode-switch">
+        <button class="mode-tab active" type="button" data-mode="daily">今日の自分向け助言</button>
+        <button class="mode-tab" type="button" data-mode="compatibility">二人の相性</button>
+      </section>
+
       <section class="panel input-panel">
-        <form id="advice-form">
-          <label>
-            生年月日
-            <input name="birthDate" type="text" inputmode="numeric" placeholder="19940529" maxlength="8" required />
-          </label>
-
-          <label>
-            出生時刻
-            <input name="birthTime" type="text" inputmode="numeric" placeholder="07:46" maxlength="5" required />
-          </label>
-
-          <label>
-            出生地
-            <input name="location" type="text" value="Tokyo" />
-          </label>
-
-          <label>
-            名前
-            <input name="name" type="text" value="User" />
-          </label>
-
-          <button type="submit">アドバイスを取得</button>
+        <form id="daily-form" class="mode-form active">
+          <div class="form-grid">
+            <label>
+              名前
+              <input name="name" type="text" value="User" />
+            </label>
+            <label>
+              生年月日
+              <input name="birthDate" type="text" inputmode="numeric" placeholder="19940529" maxlength="8" required />
+            </label>
+            <label>
+              出生時刻
+              <input name="birthTime" type="text" inputmode="numeric" placeholder="07:46" maxlength="5" required />
+            </label>
+            <label>
+              出生地
+              <input name="location" type="text" value="Tokyo" required />
+            </label>
+          </div>
+          <button type="submit">今日の助言を取得</button>
         </form>
+
+        <form id="compatibility-form" class="mode-form">
+          <div class="people-grid">
+            <section class="person-card">
+              <p class="person-label">1人目</p>
+              <label>
+                名前
+                <input name="personAName" type="text" value="A" />
+              </label>
+              <label>
+                生年月日
+                <input name="personABirthDate" type="text" inputmode="numeric" placeholder="19940529" maxlength="8" required />
+              </label>
+              <label>
+                出生時刻
+                <input name="personABirthTime" type="text" inputmode="numeric" placeholder="07:46" maxlength="5" required />
+              </label>
+              <label>
+                出生地
+                <input name="personALocation" type="text" value="Tokyo" required />
+              </label>
+            </section>
+
+            <section class="person-card">
+              <p class="person-label">2人目</p>
+              <label>
+                名前
+                <input name="personBName" type="text" value="B" />
+              </label>
+              <label>
+                生年月日
+                <input name="personBBirthDate" type="text" inputmode="numeric" placeholder="19940529" maxlength="8" required />
+              </label>
+              <label>
+                出生時刻
+                <input name="personBBirthTime" type="text" inputmode="numeric" placeholder="07:46" maxlength="5" required />
+              </label>
+              <label>
+                出生地
+                <input name="personBLocation" type="text" value="Tokyo" required />
+              </label>
+            </section>
+          </div>
+          <button type="submit">二人の相性を取得</button>
+        </form>
+
         <p class="note">
-          注: TimeQL の主要エンドポイントは出生地を使うため、12桁だけでは不十分です。最小版では `Tokyo` を初期値にしています。
+          注: 西洋占星術と奇門遁甲では出生地や判定地点が重要です。12桁だけでなく場所も必須にしています。
         </p>
       </section>
 
       <section class="panel chat-panel">
         <div id="messages" class="messages">
           <article class="message bot">
-            <p>入力を待っています。返答は TimeQL API の取得結果のみをもとに組み立てます。</p>
+            <p class="message-role">Advice</p>
+            <div class="message-body">モードを選んで入力してください。返答は TimeQL API の取得結果のみを要約して組み立てます。</div>
           </article>
         </div>
       </section>
