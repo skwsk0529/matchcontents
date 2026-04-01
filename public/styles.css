@@ -1,13 +1,12 @@
 :root {
-  --bg: #f4efe7;
-  --panel: rgba(255, 250, 242, 0.9);
-  --panel-strong: #fffdf8;
-  --ink: #1f2937;
-  --muted: #6b7280;
-  --accent: #9a3412;
-  --accent-soft: #fed7aa;
-  --line: rgba(154, 52, 18, 0.18);
-  --shadow: 0 24px 60px rgba(80, 35, 10, 0.12);
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-strong: #ffffff;
+  --ink: #111111;
+  --muted: #666666;
+  --accent: #111111;
+  --line: #d9d9d9;
+  --shadow: none;
 }
 
 * {
@@ -16,12 +15,9 @@
 
 body {
   margin: 0;
-  font-family: Georgia, "Hiragino Mincho ProN", serif;
+  font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
   color: var(--ink);
-  background:
-    radial-gradient(circle at top left, rgba(251, 191, 36, 0.18), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(194, 65, 12, 0.14), transparent 24%),
-    linear-gradient(135deg, #f8f3ea 0%, #efe4d2 100%);
+  background: var(--bg);
   min-height: 100vh;
 }
 
@@ -32,30 +28,32 @@ body {
 }
 
 .hero {
-  padding: 20px 4px 28px;
+  padding: 20px 0 32px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
 }
 
 .eyebrow {
   margin: 0 0 8px;
   color: var(--accent);
-  font-size: 13px;
-  letter-spacing: 0.16em;
+  font-size: 12px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
 .hero h1 {
   margin: 0;
-  max-width: 12ch;
-  font-size: clamp(2.2rem, 5vw, 4.3rem);
-  line-height: 0.95;
-  font-weight: 700;
+  max-width: 13ch;
+  font-size: clamp(2rem, 4.6vw, 4rem);
+  line-height: 1;
+  font-weight: 600;
 }
 
 .lead {
   max-width: 62ch;
   margin: 18px 0 0;
-  font-size: 1rem;
-  line-height: 1.8;
+  font-size: 0.98rem;
+  line-height: 1.9;
   color: var(--muted);
 }
 
@@ -70,24 +68,23 @@ body {
   padding: 0 18px;
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.48);
+  background: #ffffff;
   color: var(--ink);
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
 }
 
 .mode-tab.active {
-  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%);
-  color: #fff;
-  border-color: transparent;
+  background: #111111;
+  color: #ffffff;
+  border-color: #111111;
 }
 
 .panel {
   background: var(--panel);
   border: 1px solid var(--line);
-  border-radius: 24px;
+  border-radius: 20px;
   box-shadow: var(--shadow);
-  backdrop-filter: blur(10px);
 }
 
 .input-panel {
@@ -118,9 +115,9 @@ body {
 
 .person-card {
   padding: 18px;
-  border-radius: 18px;
+  border-radius: 16px;
   border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.46);
+  background: #fafafa;
 }
 
 .person-label {
@@ -148,7 +145,7 @@ input {
   min-height: 48px;
   padding: 0 14px;
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: 12px;
   background: var(--panel-strong);
   color: var(--ink);
 }
@@ -156,20 +153,13 @@ input {
 button[type="submit"] {
   width: 100%;
   min-height: 52px;
-  border: 0;
+  border: 1px solid #111111;
   border-radius: 999px;
-  background: linear-gradient(135deg, #7c2d12 0%, #c2410c 100%);
+  background: #111111;
   color: white;
   cursor: pointer;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.04em;
-}
-
-.note {
-  margin: 14px 2px 0;
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
 }
 
 .chat-panel {
@@ -184,13 +174,13 @@ button[type="submit"] {
 
 .message {
   padding: 16px 18px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1px solid var(--line);
 }
 
 .message.user {
-  background: rgba(154, 52, 18, 0.08);
+  background: #f7f7f7;
 }
 
 .message-role {

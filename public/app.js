@@ -8,13 +8,13 @@ const compatibilityForm = document.getElementById("compatibility-form");
 function appendMessage(role, body, facts = [], label = null) {
   const node = template.content.firstElementChild.cloneNode(true);
   node.classList.add(role);
-  node.querySelector(".message-role").textContent = label || (role === "user" ? "Input" : "Advice");
+  node.querySelector(".message-role").textContent = label || (role === "user" ? "Input" : "Read Life");
   node.querySelector(".message-body").textContent = body;
 
   if (facts.length > 0) {
     const factBox = document.createElement("div");
     factBox.className = "facts";
-    factBox.textContent = `参照した事実:\n- ${facts.join("\n- ")}`;
+    factBox.textContent = `読み取りの要点:\n- ${facts.join("\n- ")}`;
     node.appendChild(factBox);
   }
 
@@ -36,7 +36,7 @@ async function submitForm({ form, endpoint, inputSummary, roleLabel }) {
   const payload = Object.fromEntries(data.entries());
 
   appendMessage("user", inputSummary(payload), [], roleLabel);
-  appendMessage("bot", "TimeQL API に問い合わせています...", [], roleLabel);
+  appendMessage("bot", "内容を確認しています...", [], roleLabel);
 
   try {
     const response = await fetch(endpoint, {
