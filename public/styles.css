@@ -51,11 +51,12 @@ body {
 }
 
 .lead {
-  max-width: 62ch;
+  max-width: none;
   margin: 18px 0 0;
   font-size: 0.98rem;
   line-height: 1.9;
   color: var(--muted);
+  white-space: nowrap;
 }
 
 .mode-switch {
@@ -234,6 +235,10 @@ button[type="submit"] {
 
   .hero h1 {
     font-size: clamp(1.8rem, 7vw, 2.6rem);
+    white-space: normal;
+  }
+
+  .lead {
     white-space: normal;
   }
 }
