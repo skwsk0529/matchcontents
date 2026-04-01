@@ -610,6 +610,14 @@ const server = http.createServer(async (req, res) => {
     sendFile(res, path.join(PUBLIC_DIR, "app.js"));
     return;
   }
+  if (req.method === "GET" && url.pathname === "/result") {
+    sendFile(res, path.join(PUBLIC_DIR, "result.html"));
+    return;
+  }
+  if (req.method === "GET" && url.pathname === "/result.js") {
+    sendFile(res, path.join(PUBLIC_DIR, "result.js"));
+    return;
+  }
   if (req.method === "GET" && url.pathname === "/styles.css") {
     sendFile(res, path.join(PUBLIC_DIR, "styles.css"));
     return;

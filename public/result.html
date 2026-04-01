@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Read Life</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell result-shell">
+      <section class="hero">
+        <p class="eyebrow">Read Life</p>
+        <h1 id="result-title">読み取り結果</h1>
+        <p class="lead" id="result-lead">内容を確認しています。</p>
+      </section>
+
+      <section class="panel result-panel">
+        <div class="result-actions">
+          <a class="back-link" href="/">入力画面に戻る</a>
+        </div>
+
+        <div class="message">
+          <p class="message-role" id="result-role">Read Life</p>
+          <div class="message-body" id="result-body">内容を確認しています...</div>
+          <div class="facts" id="result-facts" hidden></div>
+        </div>
+      </section>
+    </main>
+
+    <script src="/result.js"></script>
+  </body>
+  </html>

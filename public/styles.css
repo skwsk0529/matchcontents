@@ -92,6 +92,25 @@ body {
   padding: 22px;
 }
 
+.result-shell {
+  width: min(980px, calc(100vw - 32px));
+}
+
+.result-panel {
+  padding: 22px;
+}
+
+.result-actions {
+  margin-bottom: 18px;
+}
+
+.back-link {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+}
+
 .mode-form {
   display: none;
 }
@@ -163,16 +182,6 @@ button[type="submit"] {
   letter-spacing: 0.04em;
 }
 
-.chat-panel {
-  margin-top: 20px;
-  padding: 18px;
-}
-
-.messages {
-  display: grid;
-  gap: 12px;
-}
-
 .message {
   padding: 16px 18px;
   border-radius: 16px;
@@ -210,6 +219,10 @@ button[type="submit"] {
   .app-shell {
     width: min(100vw - 20px, 1100px);
     padding-top: 24px;
+  }
+
+  .result-shell {
+    width: min(100vw - 20px, 980px);
   }
 
   .form-grid,
