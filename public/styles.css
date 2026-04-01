@@ -22,7 +22,7 @@ body {
 }
 
 .app-shell {
-  width: min(1100px, calc(100vw - 32px));
+  width: min(1320px, calc(100vw - 32px));
   margin: 0 auto;
   padding: 48px 0 56px;
 }
@@ -43,10 +43,11 @@ body {
 
 .hero h1 {
   margin: 0;
-  max-width: 13ch;
-  font-size: clamp(2rem, 4.6vw, 4rem);
+  max-width: none;
+  font-size: clamp(1.8rem, 3.7vw, 3.8rem);
   line-height: 1;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .lead {
@@ -219,6 +220,7 @@ button[type="submit"] {
   }
 
   .hero h1 {
-    max-width: none;
+    font-size: clamp(1.8rem, 7vw, 2.6rem);
+    white-space: normal;
   }
 }

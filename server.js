@@ -11,6 +11,8 @@ const rateLimitWindowMs = 60 * 1000;
 const rateLimitMaxRequests = 10;
 const ipHits = new Map();
 const JST_TIMEZONE = "Asia/Tokyo";
+const DEFAULT_BIRTH_TIME = "12:00";
+const DEFAULT_LOCATION = "Tokyo";
 
 function loadEnv(filename) {
   const envPath = path.join(__dirname, filename);
@@ -129,30 +131,9 @@ function validateDateDigits(dateDigits) {
   return null;
 }
 
-function validateTimeDigits(timeDigits) {
-  if (!/^\d{2}:\d{2}$/.test(timeDigits)) {
-    return "出生時刻は HH:mm 形式で入力してください。";
-  }
-
-  const hour = Number(timeDigits.slice(0, 2));
-  const minute = Number(timeDigits.slice(3, 5));
-  if (hour > 23 || minute > 59) {
-    return "出生時刻の値が不正です。";
-  }
-
-  return null;
-}
-
 function validatePerson(person, label) {
   const dateError = validateDateDigits(person.birthDate);
   if (dateError) return `${label}: ${dateError}`;
-
-  const timeError = validateTimeDigits(person.birthTime);
-  if (timeError) return `${label}: ${timeError}`;
-
-  if (!person.location || !String(person.location).trim()) {
-    return `${label}: 出生地を入力してください。`;
-  }
 
   return null;
 }
@@ -448,8 +429,8 @@ async function handleDailyAdvice(req, res, body) {
   const input = {
     name: String(body.name || "User"),
     birthDate: String(body.birthDate || ""),
-    birthTime: String(body.birthTime || ""),
-    location: String(body.location || "").trim()
+    birthTime: DEFAULT_BIRTH_TIME,
+    location: DEFAULT_LOCATION
   };
 
   const validationError = validatePerson(input, "本人");
@@ -498,14 +479,14 @@ async function handleCompatibility(req, res, body) {
   const personA = {
     name: String(body.personAName || "A"),
     birthDate: String(body.personABirthDate || ""),
-    birthTime: String(body.personABirthTime || ""),
-    location: String(body.personALocation || "").trim()
+    birthTime: DEFAULT_BIRTH_TIME,
+    location: DEFAULT_LOCATION
   };
   const personB = {
     name: String(body.personBName || "B"),
     birthDate: String(body.personBBirthDate || ""),
-    birthTime: String(body.personBBirthTime || ""),
-    location: String(body.personBLocation || "").trim()
+    birthTime: DEFAULT_BIRTH_TIME,
+    location: DEFAULT_LOCATION
   };
 
   const errorA = validatePerson(personA, "1人目");

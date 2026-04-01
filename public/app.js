@@ -66,8 +66,7 @@ dailyForm.addEventListener("submit", async (event) => {
     form: dailyForm,
     endpoint: "/api/daily-advice",
     roleLabel: "Daily",
-    inputSummary: (payload) =>
-      `名前: ${payload.name}\n生年月日: ${payload.birthDate}\n出生時刻: ${payload.birthTime}\n出生地: ${payload.location}`
+    inputSummary: (payload) => `名前: ${payload.name}\n生年月日: ${payload.birthDate}`
   });
 });
 
@@ -78,6 +77,6 @@ compatibilityForm.addEventListener("submit", async (event) => {
     endpoint: "/api/compatibility",
     roleLabel: "Compatibility",
     inputSummary: (payload) =>
-      `1人目: ${payload.personAName} / ${payload.personABirthDate} / ${payload.personABirthTime} / ${payload.personALocation}\n2人目: ${payload.personBName} / ${payload.personBBirthDate} / ${payload.personBBirthTime} / ${payload.personBLocation}`
+      `1人目: ${payload.personAName} / ${payload.personABirthDate}\n2人目: ${payload.personBName} / ${payload.personBBirthDate}`
   });
 });
