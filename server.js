@@ -201,6 +201,32 @@ async function callTimeqlSettled(label, endpoint, payload) {
   }
 }
 
+async function callKyuseiDailyWithFallback(datetime, location) {
+  const primary = await callTimeqlSettled("kyusei", "/api/v1/kyusei", {
+    datetime,
+    location
+  });
+  if (primary.ok) return primary;
+
+  const fallback = await callTimeqlSettled("kyusei", "/api/v1/kyusei/guidance", {
+    datetime,
+    location
+  });
+  if (fallback.ok) return fallback;
+
+  return primary;
+}
+
+async function callKyuseiCompatibilityWithFallback(person1Datetime, person2Datetime) {
+  const primary = await callTimeqlSettled("kyusei", "/api/v1/kyusei/compatibility", {
+    person1_datetime: person1Datetime,
+    person2_datetime: person2Datetime
+  });
+  if (primary.ok) return primary;
+
+  return { label: "kyusei", ok: true, data: {} };
+}
+
 function topKeyByNumericValue(source) {
   if (!source || typeof source !== "object") return null;
   const entries = Object.entries(source).filter(([, value]) => typeof value === "number");
@@ -327,13 +353,8 @@ function extractKyuseiCompatibilityFacts(result) {
 function buildDailyAdvice(results, input) {
   const lines = ["今日の自分向け助言"];
   const facts = [];
-  const unavailable = [];
-
   for (const result of results) {
-    if (!result.ok) {
-      unavailable.push(result.label);
-      continue;
-    }
+    if (!result.ok) continue;
 
     if (result.label === "western") facts.push(...extractNatalFacts(result.data), ...extractTransitFacts(result.data));
     if (result.label === "sukuyo") facts.push(...extractSukuyoFortuneFacts(result.data));
@@ -401,24 +422,15 @@ function buildDailyAdvice(results, input) {
       `誰かに連絡する、予定を一本決める、行く先を選ぶ、保留していた判断を小さく進める。そのどれでも構いません。` +
       `今日は大きな突破よりも、「静かに合っている方へ寄せる」ことが後押しになります。`
   );
-
-  if (unavailable.length > 0) {
-    lines.push(`取得できなかった系統: ${unavailable.join("、")}`);
-  }
-
   return { message: lines.join("\n"), facts: uniqueFacts };
 }
 
 function buildCompatibilityAdvice(results, personA, personB) {
   const lines = ["二人の相性"];
   const facts = [];
-  const unavailable = [];
 
   for (const result of results) {
-    if (!result.ok) {
-      unavailable.push(result.label);
-      continue;
-    }
+    if (!result.ok) continue;
 
     if (result.label === "synastry") facts.push(...extractSynastryFacts(result.data, personA.name, personB.name));
     if (result.label === "sukuyo") facts.push(...extractSukuyoCompatibilityFacts(result.data, personA.name, personB.name));
@@ -474,11 +486,6 @@ function buildCompatibilityAdvice(results, personA, personB) {
       `重たい話や結論を求める話題は一気に進めず、ひとつずつ段階を分けて置いていく方が、相手の反応も見えやすくなります。` +
       `この関係は、言葉の強さよりも、差し出し方のやわらかさが結果を大きく左右します。`
   );
-
-  if (unavailable.length > 0) {
-    lines.push(`取得できなかった系統: ${unavailable.join("、")}`);
-  }
-
   return { message: lines.join("\n"), facts: uniqueFacts };
 }
 
@@ -514,10 +521,7 @@ async function handleDailyAdvice(req, res, body) {
       include_ryohan: true,
       include_rokugai: true
     }),
-    callTimeqlSettled("kyusei", "/api/v1/kyusei", {
-      datetime,
-      location: input.location
-    }),
+    callKyuseiDailyWithFallback(datetime, input.location),
     callTimeqlSettled("qimen", "/api/v1/qimen", {
       datetime: currentDateTime,
       location: input.location
@@ -572,10 +576,7 @@ async function handleCompatibility(req, res, body) {
       person2_datetime: person2Datetime,
       include_details: true
     }),
-    callTimeqlSettled("kyusei", "/api/v1/kyusei/compatibility", {
-      person1_datetime: person1Datetime,
-      person2_datetime: person2Datetime
-    })
+    callKyuseiCompatibilityWithFallback(person1Datetime, person2Datetime)
   ]);
 
   const advice = buildCompatibilityAdvice(results, personA, personB);
