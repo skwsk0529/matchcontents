@@ -345,33 +345,62 @@ function buildDailyAdvice(results, input) {
 
   const transitHit = uniqueFacts.find((fact) => fact.startsWith("西洋占星術では"));
   const sukuyoWarning = uniqueFacts.find((fact) => fact.startsWith("宿曜の注意"));
+  const sukuyoLabel = uniqueFacts.find((fact) => fact.startsWith("宿曜の日運ラベル"));
+  const sukuyoScore = uniqueFacts.find((fact) => fact.startsWith("宿曜の日運スコア"));
   const qimenDirection = uniqueFacts.find((fact) => fact.startsWith("奇門遁甲の吉方位候補"));
   const kyuseiAdvice = uniqueFacts.find((fact) => fact.startsWith("九星気学の示唆"));
+  const honmeisei = uniqueFacts.find((fact) => fact.startsWith("本命星"));
   const dominantElement = uniqueFacts.find((fact) => fact.includes("元素バランス"));
 
-  if (transitHit) {
-    lines.push(`西洋占星術では強い動きとして「${transitHit.replace("西洋占星術では ", "")}」が出ています。今日は広げすぎず、1件ずつ処理を進める方が噛み合いやすいです。`);
-  }
-  if (dominantElement) {
-    lines.push(`${dominantElement}。この傾向に合わせて、今日は自分に合う動き方を優先してください。`);
-  }
-  if (kyuseiAdvice) {
-    lines.push(kyuseiAdvice.replace("九星気学の示唆: ", "九星気学の観点では "));
-  } else {
-    lines.push("九星気学の結果は、今日の判断を急ぎすぎず流れを見ながら合わせる使い方が向いています。");
-  }
-  if (qimenDirection) {
-    lines.push(`${qimenDirection}。外出や打ち合わせを入れるなら、この方向を候補に入れてください。`);
-  } else {
-    lines.push("奇門遁甲では、移動や面談は時間と場所を固定してから再確認する使い方が適しています。");
-  }
-  if (sukuyoWarning) {
-    lines.push(sukuyoWarning.replace("宿曜の注意: ", "宿曜では "));
-  } else {
-    lines.push("宿曜の観点では、今日は一気に結論を出すより、相手の出方を見ながら動く方が安定します。");
+  lines.push(
+    `${input.name} さんの今日は、勢いだけで押し切るよりも、今どこに流れが向いているのかを確かめながら進む方が納得感を持ちやすい日です。` +
+      `全体としては「今すぐ大きく変える」より「小さく整えて、合っているものを残す」動き方が合いやすく、目の前のことに丁寧に手を入れるほど感触が良くなりやすい流れが出ています。`
+  );
+
+  if (transitHit || dominantElement) {
+    lines.push(
+      `まず今日の基調として、${transitHit ? transitHit.replace("西洋占星術では ", "") : "西洋側の動き"}が目立っています。` +
+        `${dominantElement ? `${dominantElement}ため、` : ""}` +
+        `やるべきことを増やすより、優先順位を少し絞って、自分が今ほんとうに手をつけるべきものに集中すると、気持ちのブレが減っていきます。` +
+        `焦って答えを出し切ろうとするより、ひとつ終わらせてから次に進むくらいの速度感の方が、結果的には深く前へ進めます。`
+    );
   }
 
-  lines.push(`今日の一歩: ${input.name} さんは、今日中に1つだけ優先行動を決めて、連絡・移動・判断のどれかを先に実行してください。`);
+  if (kyuseiAdvice || honmeisei) {
+    lines.push(
+      `九星気学の観点では、${honmeisei ? `${honmeisei.replace("本命星は ", "")}の性質も踏まえて、` : ""}` +
+        `${kyuseiAdvice ? kyuseiAdvice.replace("九星気学の示唆: ", "") : "流れに逆らわず、無理に結論を急がない姿勢"}` +
+        `が大切です。今日は白黒を一気につけるよりも、まず場の空気を読み、自分の立ち位置を整えてから一歩出る方が自然です。` +
+        `自分から全部を動かすというより、動くべき瞬間を見逃さないことが強さになります。`
+    );
+  }
+
+  if (qimenDirection) {
+    lines.push(
+      `奇門遁甲では、${qimenDirection.replace("奇門遁甲の吉方位候補は ", "")}が良い候補として出ています。` +
+        `もし今日、外出、面談、買い物、誰かに会いに行く予定があるなら、移動の方向や立ち寄る場所を少し意識するだけでも体感が変わる可能性があります。` +
+        `大きく予定を変えなくても、「どちらへ向かうか」を丁寧に選ぶことが、気持ちの落ち着きや手応えにつながりやすい日です。`
+    );
+  } else {
+    lines.push(
+      "奇門遁甲の観点では、今日は無理に動き回るより、行く場所や会う相手を絞って動く方がまとまりやすい流れです。" +
+        "予定を増やしすぎず、必要な移動だけを選ぶことで、気持ちも結果も散らばりにくくなります。"
+    );
+  }
+
+  if (sukuyoLabel || sukuyoScore || sukuyoWarning) {
+    lines.push(
+      `宿曜では、${sukuyoLabel ? sukuyoLabel.replace("宿曜の日運ラベルは ", "") : "今日の巡り"}${sukuyoScore ? `、スコアは${sukuyoScore.replace("宿曜の日運スコアは ", "")}` : ""}という形で出ています。` +
+        `${sukuyoWarning ? sukuyoWarning.replace("宿曜の注意: ", "") : "人とのやり取りは、先に空気を読み取ってから言葉を置く方が安定しやすい流れです。"} ` +
+        `感情のままに踏み込むより、少し余白を持って距離感を見ることで、あとから「この進め方で良かった」と思える着地になりやすいです。`
+    );
+  }
+
+  lines.push(
+    `今日の一歩としては、${input.name} さんはまず「いちばん気になっていること」をひとつだけ選び、それに対して具体的な行動を一回だけ起こしてみてください。` +
+      `誰かに連絡する、予定を一本決める、行く先を選ぶ、保留していた判断を小さく進める。そのどれでも構いません。` +
+      `今日は大きな突破よりも、「静かに合っている方へ寄せる」ことが後押しになります。`
+  );
 
   if (unavailable.length > 0) {
     lines.push(`取得できなかった系統: ${unavailable.join("、")}`);
@@ -398,25 +427,53 @@ function buildCompatibilityAdvice(results, personA, personB) {
 
   const uniqueFacts = [...new Set(facts)].slice(0, 8);
   const westernScore = uniqueFacts.find((fact) => fact.startsWith("西洋占星術の相性スコア"));
+  const westernAspect = uniqueFacts.find((fact) => fact.includes("主要アスペクト"));
   const sukuyoPair = uniqueFacts.find((fact) => fact.startsWith("宿曜の組み合わせ"));
   const sukuyoQuality = uniqueFacts.find((fact) => fact.startsWith("宿曜の質感"));
+  const sukuyoScore = uniqueFacts.find((fact) => fact.startsWith("宿曜の平均相性スコア"));
   const kyuseiAdvice = uniqueFacts.find((fact) => fact.startsWith("九星気学の助言"));
+  const kyuseiRelation = uniqueFacts.find((fact) => fact.startsWith("九星気学の関係性"));
 
-  if (westernScore) {
-    lines.push(`${westernScore}。会話のテンポや役割分担を合わせると、相性の良さが表に出やすい組み合わせです。`);
+  lines.push(
+    `${personA.name} さんと ${personB.name} さんの相性は、強く引き合うかどうかだけでなく、どの距離感で関わると心地よさが保たれるかを見ると輪郭がはっきりしてきます。` +
+      `今回の読み取りでは、相手を変えようとするよりも、それぞれのテンポの違いを理解した上で関わる方が関係の良さが出やすい印象です。`
+  );
+
+  if (westernScore || westernAspect) {
+    lines.push(
+      `西洋占星術では、${westernScore ? westernScore.replace("西洋占星術の相性スコアは ", "相性スコアが") : "二人のつながり方に特徴があり"}、` +
+        `${westernAspect ? `${westernAspect.replace(`${personA.name} と ${personB.name} の主要アスペクトは `, "")}という接点も見えています。` : ""}` +
+        `この組み合わせは、感覚がぴったり重なる瞬間と、少しズレを感じる瞬間の両方が出やすいぶん、会話の持っていき方ひとつで印象がかなり変わりやすい関係です。` +
+        `気持ちを決めつけて断定するより、「今はこう感じている」とその時点の温度を言葉にした方が、関係が柔らかく進みやすくなります。`
+    );
   } else {
-    lines.push("西洋占星術では、二人の相性は行動のタイミングと会話の運び方で見極めるのが良さそうです。");
-  }
-  if (sukuyoPair) {
-    lines.push(`${sukuyoPair}。${sukuyoQuality ? sukuyoQuality.replace("宿曜の質感は ", "") : "関係の距離感に一定の傾向があります。"}。`);
-  }
-  if (kyuseiAdvice) {
-    lines.push(kyuseiAdvice.replace("九星気学の助言: ", "九星気学では "));
-  } else {
-    lines.push("九星気学では、相手のペースを尊重しながら役割をはっきりさせると関係が安定しやすいです。");
+    lines.push(
+      "西洋占星術の観点では、二人は結論を急ぐより、会話のテンポと気分の波を知っていくことで相性の良さが見えやすい組み合わせです。"
+    );
   }
 
-  lines.push(`二人への一歩: ${personA.name} さんと ${personB.name} さんは、まず短いやり取りを1回入れて反応を見る形が安全です。重い話は段階を分けてください。`);
+  if (sukuyoPair || sukuyoQuality || sukuyoScore) {
+    lines.push(
+      `宿曜では、${sukuyoPair ? sukuyoPair.replace("宿曜の組み合わせは ", "") : "二人の組み合わせ"}${sukuyoScore ? `、平均相性スコアは${sukuyoScore.replace("宿曜の平均相性スコアは ", "")}` : ""}と出ています。` +
+        `${sukuyoQuality ? `${sukuyoQuality.replace("宿曜の質感は ", "")}。` : ""}` +
+        `つまり、関係の手触りにはすでに一定の方向性があり、無理に形を決めようとしなくても、自然に心地よい距離へ寄っていける余地があります。` +
+        `近づくときも離れるときも、急な強さより、相手が受け取りやすい速度を選ぶことが大切です。`
+    );
+  }
+
+  if (kyuseiAdvice || kyuseiRelation) {
+    lines.push(
+      `九星気学では、${kyuseiRelation ? kyuseiRelation.replace("九星気学の関係性は ", "") : "二人の関係の相性"}が示されており、` +
+        `${kyuseiAdvice ? kyuseiAdvice.replace("九星気学の助言: ", "") : "相手のペースを尊重しながら役割を急いで決めすぎないこと"}が鍵になります。` +
+        `どちらが主導するかを早く決めるより、その場その場で自然に前に出る側を入れ替えられる関係の方が、長く安定しやすい流れです。`
+    );
+  }
+
+  lines.push(
+    `二人への一歩としては、${personA.name} さんと ${personB.name} さんは、まず短いやり取りを一度入れて、今の温度感を確かめるところから始めるのが良さそうです。` +
+      `重たい話や結論を求める話題は一気に進めず、ひとつずつ段階を分けて置いていく方が、相手の反応も見えやすくなります。` +
+      `この関係は、言葉の強さよりも、差し出し方のやわらかさが結果を大きく左右します。`
+  );
 
   if (unavailable.length > 0) {
     lines.push(`取得できなかった系統: ${unavailable.join("、")}`);
