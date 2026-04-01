@@ -254,6 +254,61 @@ function extractNatalFacts(natal) {
   return facts;
 }
 
+function findFactValue(facts, prefix) {
+  const fact = facts.find((item) => item.startsWith(prefix));
+  if (!fact) return null;
+  return fact.slice(prefix.length).trim();
+}
+
+function getSukuyoTone(label, score) {
+  if (label === "成" || score >= 75) {
+    return "物事を形にしやすく、少し前向きに動いたことが結果へつながりやすい日です。";
+  }
+  if (label === "親" || label === "友" || score >= 60) {
+    return "人とのやり取りや身近な用事を整えるほど、安心感が増しやすい日です。";
+  }
+  if (label === "危" || label === "安" || score <= 35) {
+    return "無理に前へ押し出すより、今日は慎重さと距離感を大切にした方が流れに合います。";
+  }
+  return "大きく崩れる日ではありませんが、勢いよりも丁寧さを選ぶほど安定しやすい日です。";
+}
+
+function getElementTone(element) {
+  const map = {
+    fire: "熱量が先に立ちやすいので、考えるだけで止めず、まず小さく着手するほど流れに乗りやすくなります。",
+    earth: "足場を固める力が強いので、今日は順番と段取りを整えることがそのまま安心感につながります。",
+    air: "言葉や情報のやり取りが鍵になりやすく、考えをひとりで抱え込まず外へ出すことが流れを良くします。",
+    water: "感情や空気への感受性が高まりやすいので、違和感を無視せず心地よい距離感を守ることが大切です."
+  };
+  return map[element] || null;
+}
+
+function getSignTone(sign) {
+  const map = {
+    Aries: "勢いで切り開く力がある一方で、今日は先走りすぎないことがむしろ強さになります。",
+    Taurus: "急がずに整える力があり、目の前の現実を少しずつ良くしていくほど実感が伴います。",
+    Gemini: "複数の可能性が見えやすいので、今日は情報を広げるより選び取ることが鍵になります。",
+    Cancer: "感情の機微を受け取りやすく、自分の安心を守る選択が結果的に全体を安定させます。",
+    Leo: "自分らしさを押し出す力がありますが、今日は見せ方を少しやわらげると届き方が良くなります。",
+    Virgo: "細部を整えるほど全体が落ち着くので、ひとつひとつを丁寧に扱うほど力を発揮できます。",
+    Libra: "関係の均衡を見る力があるため、今日は自分だけで決めきるより相手との釣り合いを見ると自然です。",
+    Scorpio: "深く集中できるので、表面的に広げず本当に大事なことへ潜ると納得感が残ります。",
+    Sagittarius: "先へ進みたい気持ちが強まりやすいですが、今日は方向を決めてから動く方が収穫が大きくなります。",
+    Capricorn: "現実的に積み上げる力があり、目標を一段ずつ刻んで進めるほど確かな手応えになります。",
+    Aquarius: "少し引いた視点で全体を見やすく、感情に飲まれず構造を見直すと流れが整います。",
+    Pisces: "感覚が先に働きやすい日なので、無理に理屈で押し切るより心が静かにうなずく方を選ぶと自然です。"
+  };
+  return map[sign] || null;
+}
+
+function getCompatibilityScoreTone(score) {
+  if (score === null || score === undefined) return null;
+  if (score >= 80) return "かなり引き合う力が強く、自然に距離が縮まりやすい組み合わせです。";
+  if (score >= 65) return "相性は良好で、やり取りを重ねるほど理解が深まりやすい組み合わせです。";
+  if (score >= 50) return "良し悪しがはっきり分かれるというより、距離感の取り方次第で印象が変わりやすい組み合わせです。";
+  return "一気に噛み合うというより、丁寧なすり合わせが必要な組み合わせです。";
+}
+
 function extractTransitFacts(transits) {
   const facts = [];
   const aspects = Array.isArray(transits.aspects) ? transits.aspects : [];
@@ -372,10 +427,18 @@ function buildDailyAdvice(results, input) {
   const kyuseiAdvice = uniqueFacts.find((fact) => fact.startsWith("九星気学の示唆"));
   const honmeisei = uniqueFacts.find((fact) => fact.startsWith("本命星"));
   const dominantElement = uniqueFacts.find((fact) => fact.includes("元素バランス"));
+  const sunSign = findFactValue(uniqueFacts, "太陽星座は ");
+  const moonSign = findFactValue(uniqueFacts, "月星座は ");
+  const dominantElementValue = findFactValue(uniqueFacts, "元素バランスでは ");
+  const sukuyoLabelValue = findFactValue(uniqueFacts, "宿曜の日運ラベルは ");
+  const sukuyoScoreValue = Number(findFactValue(uniqueFacts, "宿曜の日運スコアは "));
+  const targetSukuyo = findFactValue(uniqueFacts, "対象日の宿は ");
 
   lines.push(
-    `${input.name} さんの今日は、勢いだけで押し切るよりも、今どこに流れが向いているのかを確かめながら進む方が納得感を持ちやすい日です。` +
-      `全体としては「今すぐ大きく変える」より「小さく整えて、合っているものを残す」動き方が合いやすく、目の前のことに丁寧に手を入れるほど感触が良くなりやすい流れが出ています。`
+    `${input.name} さんの今日は、${sunSign ? `${sunSign}の性質を土台にしながら、` : ""}` +
+      `${moonSign ? `${moonSign}の感じ方も重なって、` : ""}` +
+      `自分にとって無理のない流れを選ぶほど納得感を持ちやすい日です。` +
+      `${getSignTone(sunSign) || "今日は勢いだけで押し切るより、今の自分に合う進み方を選ぶほど自然に物事がまとまりやすくなります。"}`
   );
 
   if (transitHit || dominantElement) {
@@ -385,6 +448,10 @@ function buildDailyAdvice(results, input) {
         `やるべきことを増やすより、優先順位を少し絞って、自分が今ほんとうに手をつけるべきものに集中すると、気持ちのブレが減っていきます。` +
         `焦って答えを出し切ろうとするより、ひとつ終わらせてから次に進むくらいの速度感の方が、結果的には深く前へ進めます。`
     );
+  }
+
+  if (dominantElementValue) {
+    lines.push(getElementTone(dominantElementValue) || "");
   }
 
   if (kyuseiAdvice || honmeisei) {
@@ -412,6 +479,8 @@ function buildDailyAdvice(results, input) {
   if (sukuyoLabel || sukuyoScore || sukuyoWarning) {
     lines.push(
       `宿曜では、${sukuyoLabel ? sukuyoLabel.replace("宿曜の日運ラベルは ", "") : "今日の巡り"}${sukuyoScore ? `、スコアは${sukuyoScore.replace("宿曜の日運スコアは ", "")}` : ""}という形で出ています。` +
+        `${targetSukuyo ? `今日は${targetSukuyo}の気配が重なっており、` : ""}` +
+        `${getSukuyoTone(sukuyoLabelValue, sukuyoScoreValue)} ` +
         `${sukuyoWarning ? sukuyoWarning.replace("宿曜の注意: ", "") : "人とのやり取りは、先に空気を読み取ってから言葉を置く方が安定しやすい流れです。"} ` +
         `感情のままに踏み込むより、少し余白を持って距離感を見ることで、あとから「この進め方で良かった」と思える着地になりやすいです。`
     );
@@ -445,6 +514,9 @@ function buildCompatibilityAdvice(results, personA, personB) {
   const sukuyoScore = uniqueFacts.find((fact) => fact.startsWith("宿曜の平均相性スコア"));
   const kyuseiAdvice = uniqueFacts.find((fact) => fact.startsWith("九星気学の助言"));
   const kyuseiRelation = uniqueFacts.find((fact) => fact.startsWith("九星気学の関係性"));
+  const westernScoreValue = Number(findFactValue(uniqueFacts, "西洋占星術の相性スコアは "));
+  const sukuyoPairValue = findFactValue(uniqueFacts, "宿曜の組み合わせは ");
+  const sukuyoQualityValue = findFactValue(uniqueFacts, "宿曜の質感は ");
 
   lines.push(
     `${personA.name} さんと ${personB.name} さんの相性は、強く引き合うかどうかだけでなく、どの距離感で関わると心地よさが保たれるかを見ると輪郭がはっきりしてきます。` +
@@ -454,6 +526,7 @@ function buildCompatibilityAdvice(results, personA, personB) {
   if (westernScore || westernAspect) {
     lines.push(
       `西洋占星術では、${westernScore ? westernScore.replace("西洋占星術の相性スコアは ", "相性スコアが") : "二人のつながり方に特徴があり"}、` +
+        `${getCompatibilityScoreTone(westernScoreValue) || ""}` +
         `${westernAspect ? `${westernAspect.replace(`${personA.name} と ${personB.name} の主要アスペクトは `, "")}という接点も見えています。` : ""}` +
         `この組み合わせは、感覚がぴったり重なる瞬間と、少しズレを感じる瞬間の両方が出やすいぶん、会話の持っていき方ひとつで印象がかなり変わりやすい関係です。` +
         `気持ちを決めつけて断定するより、「今はこう感じている」とその時点の温度を言葉にした方が、関係が柔らかく進みやすくなります。`
@@ -468,6 +541,8 @@ function buildCompatibilityAdvice(results, personA, personB) {
     lines.push(
       `宿曜では、${sukuyoPair ? sukuyoPair.replace("宿曜の組み合わせは ", "") : "二人の組み合わせ"}${sukuyoScore ? `、平均相性スコアは${sukuyoScore.replace("宿曜の平均相性スコアは ", "")}` : ""}と出ています。` +
         `${sukuyoQuality ? `${sukuyoQuality.replace("宿曜の質感は ", "")}。` : ""}` +
+        `${sukuyoPairValue ? `${sukuyoPairValue}という組み合わせは、関係の近づき方そのものに癖が出やすいので、` : ""}` +
+        `${sukuyoQualityValue ? `${sukuyoQualityValue}という感触を前提に、` : ""}` +
         `つまり、関係の手触りにはすでに一定の方向性があり、無理に形を決めようとしなくても、自然に心地よい距離へ寄っていける余地があります。` +
         `近づくときも離れるときも、急な強さより、相手が受け取りやすい速度を選ぶことが大切です。`
     );
@@ -508,6 +583,11 @@ async function handleDailyAdvice(req, res, body) {
   const currentDateTime = getCurrentJstDateTime();
 
   const results = await Promise.all([
+    callTimeqlSettled("western", "/api/v1/natal_chart", {
+      name: input.name,
+      datetime,
+      location: input.location
+    }),
     callTimeqlSettled("western", "/api/v1/transits", {
       name: input.name,
       datetime,
